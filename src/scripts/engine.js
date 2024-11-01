@@ -76,6 +76,23 @@ async function createCardImage(cardId, fieldSide) {
   return cardImage;
 }
 
+async function setCardsField(cardId) {
+  await removeAllCardsImages();
+
+  let computerCardId = getRandomCardId();
+
+  state.fiedCards.player.style.display = 'block';
+  state.fiedCards.computer.style.display = 'block';
+
+  state.fiedCards.player.src = cardData[cardId];
+  state.fiedCards.computer.src = cardData[computerCardId];
+
+  let duelResults = await checkDuelResults(cardId, computerCardId);
+
+  await updateScore();
+  await drawButton(duelResults);
+}
+
 async function drawSelectCard(index) {
   state.cardSprites.avatar.src = cardData[index].img;
   state.cardSprites.name.innerText = cardData[index].name;
