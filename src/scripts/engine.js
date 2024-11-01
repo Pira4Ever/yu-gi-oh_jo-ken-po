@@ -13,14 +13,15 @@ const state = {
     player: document.getElementById('player-field-card'),
     computer: document.getElementById('computer-field-card'),
   },
+  playerSides: {
+    player1: 'player-cards',
+    player1Box: document.querySelector('#player-cards'),
+    computer: 'computer-cards',
+    computerBox: document.querySelector('#computer-cards'),
+  },
   actions: {
     button: document.getElementById('next-duels'),
   },
-};
-
-const playerSides = {
-  player1: 'player-cards',
-  computer: 'computer-cards',
 };
 
 const imagesPath = 'src/assets/icons/';
@@ -64,7 +65,7 @@ async function createCardImage(cardId, fieldSide) {
   cardImage.setAttribute('data-id', cardId);
   cardImage.classList.add('card');
 
-  if (fieldSide === playerSides.player1) {
+  if (fieldSide === state.playerSides.player1) {
     cardImage.addEventListener('click', () => {
       setCardsField(cardImage.getAttribute('data-id'));
     });
@@ -79,18 +80,27 @@ async function createCardImage(cardId, fieldSide) {
 async function setCardsField(cardId) {
   await removeAllCardsImages();
 
-  let computerCardId = getRandomCardId();
+  let computerCardId = await getRandomCardId();
 
   state.fiedCards.player.style.display = 'block';
   state.fiedCards.computer.style.display = 'block';
 
-  state.fiedCards.player.src = cardData[cardId];
-  state.fiedCards.computer.src = cardData[computerCardId];
+  state.fiedCards.player.src = cardData[cardId].img;
+  state.fiedCards.computer.src = cardData[computerCardId].img;
 
-  let duelResults = await checkDuelResults(cardId, computerCardId);
+  // let duelResults = await checkDuelResults(cardId, computerCardId);
 
-  await updateScore();
-  await drawButton(duelResults);
+  // await updateScore();
+  // await drawButton(duelResults);
+}
+
+async function removeAllCardsImages() {
+  let {computerBox, player1Box} = state.playerSides;
+  let imgElements = computerBox.querySelectorAll('img');
+  imgElements.forEach((img) => img.remove());
+
+  imgElements = player1Box.querySelectorAll('img');
+  imgElements.forEach((img) => img.remove());
 }
 
 async function drawSelectCard(index) {
@@ -109,8 +119,8 @@ async function drawCards(cardNumbers, filedSide) {
 }
 
 function init() {
-  drawCards(5, playerSides.player1);
-  drawCards(5, playerSides.computer);
+  drawCards(5, state.playerSides.player1);
+  drawCards(5, state.playerSides.computer);
 }
 
 init();
