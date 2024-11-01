@@ -20,7 +20,7 @@ const state = {
     computerBox: document.querySelector('#computer-cards'),
   },
   actions: {
-    button: document.getElementById('next-duels'),
+    button: document.getElementById('next-duel'),
   },
 };
 
@@ -41,7 +41,7 @@ const cardData = [
     type: 'Rock',
     img: `${imagesPath}magician.png`,
     winOf: [2],
-    loseOf: [1],
+    loseOf: [0],
   },
   {
     id: 2,
@@ -49,7 +49,7 @@ const cardData = [
     type: 'Scissors',
     img: `${imagesPath}exodia.png`,
     winOf: [0],
-    loseOf: [2],
+    loseOf: [1],
   },
 ];
 
@@ -88,14 +88,38 @@ async function setCardsField(cardId) {
   state.fiedCards.player.src = cardData[cardId].img;
   state.fiedCards.computer.src = cardData[computerCardId].img;
 
-  // let duelResults = await checkDuelResults(cardId, computerCardId);
+  let duelResults = await checkDuelResults(cardId, computerCardId);
 
-  // await updateScore();
-  // await drawButton(duelResults);
+  await updateScore();
+  await drawButton(duelResults);
+}
+
+async function drawButton(text) {
+  state.actions.button.innerText = text;
+  state.actions.button.style.display = 'block';
+}
+
+async function updateScore() {
+  state.score.scoreBox.innerText = `Win: ${state.score.playerScore} | Lose: ${state.score.computerScore}`;
+}
+
+async function checkDuelResults(playerCardId, computerCardId) {
+  let duelResults = 'Empate';
+  let playerCard = cardData[playerCardId];
+
+  if (playerCard.winOf.includes(computerCardId)) {
+    duelResults = 'Ganhou';
+    state.score.playerScore++;
+  } else if (playerCard.loseOf.includes(computerCardId)) {
+    duelResults = 'Perdeu';
+    state.score.computerScore++;
+  }
+
+  return duelResults;
 }
 
 async function removeAllCardsImages() {
-  let {computerBox, player1Box} = state.playerSides;
+  let { computerBox, player1Box } = state.playerSides;
   let imgElements = computerBox.querySelectorAll('img');
   imgElements.forEach((img) => img.remove());
 
