@@ -1,3 +1,5 @@
+html { overflow-y: hidden; }
+
 body {
   cursor: url('../assets/cursor/yugicursor.png'), default;
 }
