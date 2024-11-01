@@ -14,9 +14,14 @@ const state = {
     computer: document.getElementById('computer-field-card'),
   },
   actions: {
-    button: document.getElementById('next-duels')
+    button: document.getElementById('next-duels'),
   },
 };
+
+const playerSides = {
+  player1: 'player-field-card',
+  computer: 'computer-field-card'
+}
 
 const imagesPath = 'src/assets/icons/';
 
@@ -27,7 +32,7 @@ const cardData = [
     type: 'Paper',
     img: `${imagesPath}dragon.png`,
     winOf: [1],
-    loseOf: [2]
+    loseOf: [2],
   },
   {
     id: 1,
@@ -35,7 +40,7 @@ const cardData = [
     type: 'Rock',
     img: `${imagesPath}magician.png`,
     winOf: [2],
-    loseOf: [1]
+    loseOf: [1],
   },
   {
     id: 2,
@@ -43,10 +48,22 @@ const cardData = [
     type: 'Scissors',
     img: `${imagesPath}exodia.png`,
     winOf: [0],
-    loseOf: [1]
-  }
-]
+    loseOf: [2],
+  },
+];
 
-function init() {}
+async function drawCards(cardNumbers, filedSide) {
+  for (let i = 0; i < cardNumbers; i++) {
+    const randomIdCard = await getRandomCardId();
+    const cardImage = await createCardImage(randomIdCard, filedSide)
+
+    document.getElementById(filedSide).appendChild(cardImage)
+  }
+}
+
+function init() {
+  drawCards(5, playerSides.player1);
+  drawCards(5, playerSides.computer);
+}
 
 init();
