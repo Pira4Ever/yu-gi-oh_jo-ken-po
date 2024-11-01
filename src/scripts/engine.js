@@ -162,6 +162,8 @@ async function playAudio(status) {
 }
 
 function init() {
+  state.fiedCards.player.style.display = 'none';
+  state.fiedCards.computer.style.display = 'none';
   drawCards(5, state.playerSides.player1);
   drawCards(5, state.playerSides.computer);
 }
